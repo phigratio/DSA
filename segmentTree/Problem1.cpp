@@ -68,17 +68,17 @@ void solve()
     {
         cin >> arr[i];
     }
-     int n2;
+    SGTree sg1(n);
+    sg1.build(0,0,n-1,arr);
+    int n2;
     cin >> n2;
     int arr2[n2];
     for (int i = 0; i < n2; i++)
     {
         cin >> arr2[i];
     }
-    SGTree sg1(n);
-    sg1.build(0, 0, n - 1, arr);
     SGTree sg2(n);
-    sg2.build(0, 0, n - 1, arr2);
+    sg2.build(0, 0, n2 - 1, arr2);
     int q;
     cin >> q;
     while (q--)
@@ -91,20 +91,32 @@ void solve()
             cin >> l1 >> r1>>l2>>r2;
             int min1=sg1.query(0, 0, n - 1, l1, r1) ;
             int min2=sg2.query(0,0,n2-1,l2,r2);
+            cout<<min(min1,min2)<<endl;
         }
         else
         {
             int arrNo,i, val;
             cin >>arrNo>> i >> val;
+            if (arrNo==1)
+            {
             sg1.update(0, 0, n - 1, i, val);
-            sg2.update(0, 0, n - 1, i, val);
             arr[i] = val;
+            }
+            else{
+            sg2.update(0, 0, n - 1, i, val);
+            arr2[i]=val;
+            }
+            
         }
     }
 }
 
 int main()
 {
+    #ifndef ONLINE_JUDGE
+    freopen("input.txt","r",stdin);
+    freopen("output.txt","w",stdout);
+    #endif
     solve();
     return 0;
 }

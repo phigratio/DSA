@@ -4,8 +4,8 @@ int n, m;
 int ans = 0;
 int dx[4] = {0, 0, 1, -1};
 int dy[4] = {1, -1, 0, 0};
-int vis[1001][1001];
-char grid[1001][1001];
+int visited[1001][1001];
+char matrix[1001][1001];
 bool isValid(int y, int x)
 {
   if (y < 0)
@@ -16,7 +16,7 @@ bool isValid(int y, int x)
     return false;
   if (x >= m)
     return false;
-  if (grid[y][x] == '#')
+  if (matrix[y][x] == '#')
     return false;
 
   return true;
@@ -24,14 +24,14 @@ bool isValid(int y, int x)
 void dfs(int y, int x)
 {
 
-  vis[y][x] = 1;
+  visited[y][x] = 1;
   for (int i = 0; i < 4; i++)
   {
     int nx = x + dx[i];
     int ny = y + dy[i];
     if (isValid(ny, nx))
     {
-      if (!vis[ny][nx])
+      if (!visited[ny][nx])
       {
         dfs(ny, nx);
       }
@@ -46,15 +46,15 @@ int main()
   {
     for (int j = 0; j < m; j++)
     {
-      cin >> grid[i][j];
-      vis[i][j] = 0;
+      cin >> matrix[i][j];
+      visited[i][j] = 0;
     }
   }
   for (int i = 0; i < n; i++)
   {
     for (int j = 0; j < m; j++)
     {
-      if (grid[i][j] == '.' and !vis[i][j])
+      if (matrix[i][j] == '.' and !visited[i][j])
       {
         dfs(i, j);
         ans++;

@@ -1,32 +1,64 @@
 #include <bits/stdc++.h>
 using namespace std;
+#define ll long long
 
-const int maxi = 1e5 + 1;
-int n, m;
-int si, sj, ti, tj;
-char dc[4] = {'U', 'D', 'L', 'R'};
-int dx[4] = {-1, 1, 0, 0};
-int dy[4] = {0, 0, -1, 1};
-int visited[1001][1001];
-string matrix[1001];
-string par[1001];
-string step = "";
+ll n, m;
+ll si, sj;
+ll ei, ej;
+char matrix[1001][1001];
+bool vis[1001][1001];
+int parent[1001][1001];
+queue<pair<int, int>> q;
+int dy[4] = {1, -1, 0, 0};
+int dx[4] = {0, 0, 1, -1};
+char d[4] = {'R', 'L', 'D', 'U'};
+string ans = "";
 
-bool isValid(int x, int y)
+void bfs()
 {
-  return x >= 0 && y >= 0 && x < n && y < m && matrix[x][y] == '.';
-}
+  q.push({si, sj});
+  vis[si][sj] = true;
 
-void dfs(int y, int x)
-{
-  visited[y][x] = 1;
-  for (int i = 0; i < 4; i++)
+  while (!q.empty())
   {
-    int nx = x + dx[i];
-    int ny = y + dy[i];
-    if (isValid(nx, ny) && !visited[ny][nx])
+    pair<int, int> u = q.front();
+    q.pop();
+
+    for (int i = 0; i < 4; i++)
     {
-      dfs(ny, nx);
+      pair<int, int> temp = {u.first + dx[i], u.second + dy[i]};
+
+      if (temp.first < 0 or temp.second < 0 or temp.first >= n or temp.second >= m)
+      {
+        continue;
+      }
+      if (matrix[temp.first][temp.second] == '#')
+      {
+        continue;
+      }
+      if (vis[temp.first][temp.second])
+      {
+        continue;
+      }
+
+      vis[temp.first][temp.second] = true;
+      parent[temp.first][temp.second] = i; // Update the parent array
+
+      q.push(temp);
+      if (matrix[temp.first][temp.second] == 'B')
+      {
+        // Reconstruct the path
+        pair<int, int> current = temp;
+        while (current != make_pair(static_cast<int>(si), static_cast<int>(sj)))
+        {
+          int direction = parent[current.first][current.second];
+          ans += d[direction];
+          current = {current.first - dx[direction], current.second - dy[direction]};
+        }
+
+        reverse(ans.begin(), ans.end()); // Reverse the path string
+        return;
+      }
     }
   }
 }
@@ -36,51 +68,32 @@ int main()
   cin >> n >> m;
   for (int i = 0; i < n; i++)
   {
-    cin >> matrix[i];
     for (int j = 0; j < m; j++)
     {
+      cin >> matrix[i][j];
+
       if (matrix[i][j] == 'A')
       {
-        si = i;
-        sj = j;
+        si = i, sj = j;
       }
       else if (matrix[i][j] == 'B')
       {
-        ti = i;
-        tj = j;
+        ei = i, ej = j;
       }
     }
-    par[i] = string(m, 0);
   }
 
-  dfs(si, sj);
+  bfs();
 
-  if (visited[ti][tj])
+  if (vis[ei][ej])
   {
     cout << "YES" << endl;
-    while (ti != si || tj != sj)
-    {
-      for (int i = 0; i < 4; i++)
-      {
-        int nx = ti + dx[i];
-        int ny = tj + dy[i];
-        if (isValid(nx, ny) && visited[ny][nx] == visited[ti][tj] - 1)
-        {
-          step += dc[i];
-          ti = nx;
-          tj = ny;
-          break;
-        }
-      }
-    }
-
-    reverse(step.begin(), step.end());
-    cout << step.size() << endl;
-    cout << step;
+    cout << ans.size() << endl;
+    cout << ans << endl;
   }
   else
   {
-    cout << "NO";
+    cout << "NO" << endl;
   }
 
   return 0;

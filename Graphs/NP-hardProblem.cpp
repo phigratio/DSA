@@ -37,7 +37,7 @@ int main()
     adj[b].push_back(a);
   }
 
-  for (int i = 1; i <= n; i++)
+  for (int i = 0; i <= n; i++)
   {
     if (!vis[i])
       dfs(i, 0ll);

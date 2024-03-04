@@ -6,6 +6,7 @@ vector<vector<int>> adj(maxi);
 vector<bool> vis(maxi);
 vector<bool> color(maxi);
 bool pos;
+bool flag = false;
 vector<ll> ans[2];
 void dfs(ll u, ll col)
 {
@@ -13,7 +14,7 @@ void dfs(ll u, ll col)
   {
     if (color[u] != col)
     {
-      cout << "-1" << endl;
+      flag = true;
     }
     return;
   }
@@ -37,10 +38,15 @@ int main()
     adj[b].push_back(a);
   }
 
-  for (int i = 0; i <= n; i++)
+  for (int i = 1; i <= n; i++)
   {
     if (!vis[i])
       dfs(i, 0ll);
+  }
+  if (flag)
+  {
+    cout << -1 << endl;
+    return 0;
   }
   for (int i = 0; i < 2; i++)
   {

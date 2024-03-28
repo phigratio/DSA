@@ -5,23 +5,31 @@ using namespace std;
   ios_base::sync_with_stdio(0); \
   cin.tie(0);                   \
   cout.tie(0);
-const ll maxi = 1e6 + 1;
 const ll MOD = 1e9 + 7;
 const ll INF = 1e9;
 #define pb push_back
 #define f first
 #define s second
-vector<vector<int>> adj(maxi);
-vector<ll> subSize(maxi);
 void muqtu()
 {
   ll n;
   cin >> n;
   vector<ll> arr(n + 1);
-  for (int i = 0; i < n - 1; i++)
+  unordered_map<ll, ll> hesh(n + 1);
+  ll ans = 0, start = 0;
+  for (int i = 0; i < n; i++)
   {
     cin >> arr[i];
+    if (hesh.find(arr[i]) != hesh.end() && hesh[arr[i]] >= start)
+    {
+      ans = max(ans, i - start);
+      start = hesh[arr[i]] + 1;
+    }
+    hesh[arr[i]] = i;
   }
+
+  ans = max(ans, n - start);
+  cout << ans << endl;
 }
 int main()
 {

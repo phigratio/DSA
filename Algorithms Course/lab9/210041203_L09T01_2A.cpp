@@ -8,47 +8,51 @@ using namespace std;
 const ll MOD = 1e9 + 7;
 const ll INF = 1e9;
 const ll maxi = 1e6 + 1;
-
 #define pb push_back
 #define f first
 #define s second
-ll n, x;
-vector<ll> coins(101, -1);
+
 vector<ll> dp(maxi, -1);
-ll dyni(ll c)
+
+ll dyni(vector<ll> &coins, ll x)
 {
-  if (dp[c] != -1)
-    return dp[c];
-  dp[0] = 1;
-  dp[c] = 0;
-  for (int i = 0; i < n; i++)
+  dp[0] = 0;
+  for (ll coin : coins)
   {
-    if (c - coins[i] >= 0)
-      dp[c] = (dp[c] + dyni(c - coins[i])) % MOD;
+    for (ll i = coin; i <= x; i++)
+    {
+      if (dp[i - coin] != -1)
+      {
+        if (dp[i] == -1 || dp[i] > dp[i - coin] + 1)
+        {
+          dp[i] = dp[i - coin] + 1;
+        }
+      }
+    }
   }
-  return dp[c] % MOD;
+  return dp[x];
 }
 
 void muqtu()
 {
-
-  cin >> n >> x;
-
+  vector<ll> coins(maxi);
+  ll n;
+  cin >> n;
   for (int i = 0; i < n; i++)
   {
     cin >> coins[i];
   }
-  ll ans = 0;
 
-  ans += dyni(x);
-
+  ll x;
+  cin >> x;
+  ll ans = dyni(coins, x);
   cout << ans << endl;
 }
+
 int main()
 {
   faster;
-  ll t;
-  t = 1;
+  ll t = 1;
   while (t--)
   {
     muqtu();

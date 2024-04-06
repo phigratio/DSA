@@ -5,22 +5,38 @@ using namespace std;
   ios_base::sync_with_stdio(0); \
   cin.tie(0);                   \
   cout.tie(0);
-const ll maxi = 1e6 + 1;
 const ll MOD = 1e9 + 7;
 const ll INF = 1e9;
+const ll maxi = 1e6 + 1;
 #define pb push_back
 #define f first
-#define s second
-vector<vector<int>> adj(maxi);
+vector<vector<ll>> adj(maxi);
 vector<ll> subSize(maxi);
+#define s second
+ll dfs(ll x)
+{
+  if (adj[x].size() == 0)
+    return 1;
+  for (int i = 0; i < adj[x].size(); i++)
+  {
+    subSize[x] += dfs(adj[x][i]);
+  }
+  return subSize[x] + 1;
+}
 void muqtu()
 {
   ll n;
   cin >> n;
-  vector<ll> arr(n + 1);
-  for (int i = 0; i < n - 1; i++)
+  for (int i = 2; i <= n; i++)
   {
-    cin >> arr[i];
+    ll boss;
+    cin >> boss;
+    adj[boss].pb(i);
+  }
+  dfs(1);
+  for (ll i = 1; i <= n; i++)
+  {
+    cout << subSize[i] << " ";
   }
 }
 int main()
